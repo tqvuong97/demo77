@@ -1,12 +1,11 @@
 class PostsController < ApplicationController
-@@current_step = 0 
+  @@current_step = 0 
    # before_action :authenticate_user! , except: [:index]
   before_action :set_post, only: [ :show ,:edit, :update, :destroy]
 
   # GET /posts
   # GET /posts.json
   def index
-   
     @posts = Post.all
   
   end
@@ -38,23 +37,11 @@ class PostsController < ApplicationController
       render partial: 'steps/add_conclusion'
     else
 
-      
-        
     end
-
   end
   
   def create
-    # @post = Post.new
-
-    # @post.user_id = current_user.id
-    # @post.save validate: false
-    # @post.ispublish = 0
-    # redirect_to post_step_path(@post, Post.form_steps.first)
-
-  
-    @post = Post.new(post_params)
-    
+    @post = Post.new(post_params)    
     @post.user_id = current_user.id
     if params[:commit] == 'next'
       @@current_step = @@current_step + 1
@@ -63,9 +50,9 @@ class PostsController < ApplicationController
       render partial: 'steps/add_body'
     end
     if params[:commit] == 'save'
-       @post.current_step = @@current_step.to_s
-        @post.save
-        render partial: 'steps/add_title'
+      @post.current_step = @@current_step.to_s
+      @post.save
+      render partial: 'steps/add_title'
      
     end
 
@@ -98,10 +85,8 @@ class PostsController < ApplicationController
         @@current_step = @@current_step - 1
         @post.current_step = @@current_step.to_s
         @post.update post_params
-        render partial: 'steps/add_body'
-          
-      end
-      
+        render partial: 'steps/add_body'   
+      end    
     end
     if params[:commit]== 'Publish'
       @@current_step = nil
@@ -122,21 +107,9 @@ class PostsController < ApplicationController
         
       elsif @post.current_step == '2' 
          @post.update post_params
-          render partial: 'steps/add_conclusion'
-        
-      end
-      
+          render partial: 'steps/add_conclusion'      
+      end     
     end
-
-    # respond_to do |format|
-    #   if @post.update(post_params)
-    #     format.html { redirect_to @post, notice: 'post was successfully updated.' }
-    #     format.json { render :show, status: :ok, location: @post }
-    #   else
-    #     format.html { render :edit }
-    #     format.json { render json: @post.errors, status: :unprocessable_entity }
-    #   end
-    # end
   end
 
   # DELETE /posts/1
